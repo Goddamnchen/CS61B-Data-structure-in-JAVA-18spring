@@ -21,7 +21,6 @@ hs_err_pid*
 .directory
 .Trash-*
 .nfs*
-*.DS_Store
 .AppleDouble
 .LSOverride
 Icon
@@ -49,3 +48,4 @@ $RECYCLE.BIN/
 *.msp
 *.lnk
 .DS_Store
+*.idea/
