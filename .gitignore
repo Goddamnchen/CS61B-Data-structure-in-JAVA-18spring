@@ -49,4 +49,4 @@ $RECYCLE.BIN/
 *.lnk
 *.DS_Store
 out
-*.idea/
+.idea
