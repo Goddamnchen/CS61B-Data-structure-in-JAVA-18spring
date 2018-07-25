@@ -5,8 +5,11 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import lab9.BSTMap;
 
+import java.util.Set;
+
 /**
  * Tests by Brendan Hu, Spring 2015, revised for 2018 by Josh Hug
+ * Revised for integrated implementation of BSTMaP by Guanting Chen
  */
 public class TestBSTMap {
 
@@ -88,7 +91,7 @@ public class TestBSTMap {
 
     //assume remove(key) work
     @Test
-    public void sanityRemoveTest() {
+    public void sanityRemove1Test() {
         BSTMap<String, Integer> b = new BSTMap<String, Integer>();
         b.put("hi", 1);
         b.put("hi1", 2);
@@ -99,6 +102,42 @@ public class TestBSTMap {
         assertTrue(b.containsKey("hi1"));
         assertEquals(1, removedValue);
         assertEquals(1, b.size());
+    }
+    @Test
+    public void sanityRemove2Test() {
+        BSTMap<String, Integer> b = new BSTMap<String, Integer>();
+        b.put("hi", 0);
+        b.put("hi2", 2);
+        b.put("hi1", 1);
+        Object rm1 = b.remove("hi", 2);
+        assertEquals(null, rm1);
+        Object rm2 = b.remove("hi2", 2);
+        assertEquals(2, rm2);
+        assertEquals(2, b.size());
+    }
+    @Test
+    public void sanityKeysSetTest() {
+        BSTMap<String, Integer> b = new BSTMap<String, Integer>();
+        for (int i = 0; i < 10; i++) {
+            b.put("hi" + i, 1);
+        }
+        b.remove("hi9");
+        Set<String> bSet = b.keySet();
+        assertEquals(9, bSet.size());
+        for (int i = 0; i < 9; i++) {
+            bSet.contains("hi" + i);
+        }
+    }
+    @Test
+    public void sanityIteratorTest() {
+        BSTMap<String, Integer> b = new BSTMap<String, Integer>();
+        for (int i = 0; i < 10; i++) {
+            b.put("hi" + i, 1);
+        }
+        b.remove("hi9");
+        for(String key : b) {
+            System.out.println(key);
+        }
     }
 
     public static void main(String[] args) {

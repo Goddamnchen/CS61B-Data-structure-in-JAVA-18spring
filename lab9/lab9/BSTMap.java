@@ -1,14 +1,14 @@
 package lab9;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Implementation of interface Map61B with BST as core data structure.
  *
- * @author Guanting Chen
- * @since  07/20/2018
+ * @version integrated implementation
+ * @author  Guanting Chen
+ * @since   07/20/2018
+ *
  */
 public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
@@ -103,10 +103,21 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     /* Returns a Set view of the keys contained in this map. */
     @Override
     public Set<K> keySet() {
-        throw new UnsupportedOperationException();
+        Set<K> ks = new HashSet<>();
+        if (root == null) throw new IllegalArgumentException("calls keySet() with a null root ");
+        else collectKeys(root, ks);
+        return ks;
+    }
+    private void collectKeys(Node p, Collection<K> collection) {
+        if (p == null) return;
+        collectKeys(p.left, collection);
+        collectKeys(p.right, collection);
+        collection.add(p.key);
+        return;
     }
 
     private Node removeHelper(Node p, K key) {
+        if (p == null) throw new IllegalArgumentException("Stack Underflow: calls removeHelper(Node, Key) with a null Node");
         int cmp = key.compareTo(p.key);
         if      (cmp < 0) p.left  = removeHelper(p.left, key);
         else if (cmp > 0) p.right = removeHelper(p.right, key);
@@ -118,7 +129,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
             //otherwise, find and store p's successor
             //dealing with successor's link, including parent and right child
             //then replace the p with the stored successor
-            Node successor = min(p.right);  // See page 407.
+            Node successor = min(p.right);
             successor.right = deleteMin(p.right);
             successor.left = p.left;
             p = successor;
@@ -126,14 +137,21 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         return p;
 
     }
+    /* delete Node p's successor and get the new tree rooted at p */
     private Node deleteMin(Node p) {
         if (p.left == null) return p.right;
         p.left = deleteMin(p.left);
         return p;
     }
+    /* return the minimal node of current tree rooted at p */
     private Node min(Node p) {
         if (p.left == null) return p;
         return min(p.left);
+    }
+
+    private Node max(Node p) {
+        if (p.right == null) return p;
+        return min(p.right);
     }
     /** Removes KEY from the tree if present
      *  returns VALUE removed,
@@ -143,7 +161,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     public V remove(K key) {
         if (key == null) throw new IllegalArgumentException("calls remove() with a null key");
         V value = get(key);
-        if (size == 0 || value == null) return null;
+        if (value == null) return null;
         else {
             root = removeHelper(root, key);
             size--;
@@ -158,7 +176,15 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      **/
     @Override
     public V remove(K key, V value) {
-        return null;
+        if (key == null) throw new IllegalArgumentException("calls remove() with a null key");
+        if (value == null) throw new IllegalArgumentException("calls remove() with a null value");
+        V actualValue = get(key);
+        if (actualValue != value) return null;
+        else {
+            root = removeHelper(root, key);
+            size--;
+            return actualValue;
+        }
     }
 
     @Override
@@ -166,12 +192,20 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         return new TreeIterator();
     }
     private class TreeIterator implements Iterator<K> {
+        Stack<K> s;     // using stack to reverse to the natural order of keys of BST
 
-        public boolean hasNext() {
-            return true;
+        public TreeIterator() {
+            s = new Stack<>();
+            collectKeys(root, s);
         }
-        public K next(){
-            return null;
+        @Override
+        public boolean hasNext() {
+            return s.size() != 0;
+        }
+        @Override
+        public K next() {
+            if (!hasNext()) throw new NoSuchElementException();
+            return s.pop();
         }
     }
 }
