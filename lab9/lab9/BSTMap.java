@@ -108,12 +108,12 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         else collectKeys(root, ks);
         return ks;
     }
+    /* Inorder Tree Traveral, add to collection in natural order */
     private void collectKeys(Node p, Collection<K> collection) {
         if (p == null) return;
         collectKeys(p.left, collection);
-        collectKeys(p.right, collection);
         collection.add(p.key);
-        return;
+        collectKeys(p.right, collection);
     }
 
     private Node removeHelper(Node p, K key) {
@@ -192,7 +192,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         return new TreeIterator();
     }
     private class TreeIterator implements Iterator<K> {
-        Stack<K> s;     // using stack to reverse to the natural order of keys of BST
+        Stack<K> s;     // using stack to reverse to the decreasing order of keys of BST
 
         public TreeIterator() {
             s = new Stack<>();

@@ -9,7 +9,7 @@ import java.util.Set;
 
 /**
  * Tests by Brendan Hu, Spring 2015, revised for 2018 by Josh Hug
- * Revised for integrated implementation of BSTMaP by Guanting Chen
+ * Revised for integrated implementation of BSTMap by Guanting Chen
  */
 public class TestBSTMap {
 
