@@ -1,5 +1,6 @@
 package lab9;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -25,6 +26,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         buckets = new ArrayMap[DEFAULT_SIZE];
         this.clear();
     }
+
     public MyHashMap(int capacity) {
         buckets = new ArrayMap[capacity];
         this.clear();
@@ -94,7 +96,13 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     /* Returns a Set view of the keys contained in this map. */
     @Override
     public Set<K> keySet() {
-        throw new UnsupportedOperationException();
+        Set<K> keyset = new HashSet<>();
+        for (int i = 0; i < buckets.length; i += 1) {
+            if (buckets[i].size() != 0) {
+                keyset.addAll(buckets[i].keySet());
+            }
+        }
+        return keyset;
     }
 
     /* Removes the mapping for the specified key from this map if exists.
@@ -102,7 +110,14 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * UnsupportedOperationException. */
     @Override
     public V remove(K key) {
-        throw new UnsupportedOperationException();
+        if (key == null) throw new IllegalArgumentException("calls remove() with a null key");
+        V value = get(key);
+        if (value == null) return null;
+        else {
+            buckets[hash(key)].remove(key);
+            size--;
+            return value;
+        }
     }
 
     /* Removes the entry for the specified key only if it is currently mapped to
@@ -110,12 +125,20 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * throw an UnsupportedOperationException.*/
     @Override
     public V remove(K key, V value) {
-        throw new UnsupportedOperationException();
+        if (key == null) throw new IllegalArgumentException("calls remove() with a null key");
+        if (value == null) throw new IllegalArgumentException("calls remove() with a null value");
+        V actualValue = get(key);
+        if (actualValue != value) return null;
+        else {
+            buckets[hash(key)].remove(key);
+            size--;
+            return actualValue;
+        }
     }
 
     @Override
     public Iterator<K> iterator() {
-        throw new UnsupportedOperationException();
+        return keySet().iterator();
     }
 
 }

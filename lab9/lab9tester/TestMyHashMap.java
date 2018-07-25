@@ -126,6 +126,31 @@ public class TestMyHashMap {
         assertEquals(345, studentIDs.get("evil alan").intValue());
         assertEquals(studentIDs.get("evil alan"), studentIDs.get("alan"));
     }
+    @Test
+    public void sanityKeysSetTest() {
+        MyHashMap<String, Integer> b = new MyHashMap<String, Integer>();
+        for (int i = 0; i < 455; i++) {
+            b.put("hi" + i, 1);
+        }
+        int keynum = b.keySet().size();
+        assertEquals(455, keynum);
+
+    }
+
+    @Test
+    public void sanityIteratorTest() {
+        MyHashMap<String, Integer> b = new MyHashMap<String, Integer>();
+        for (int i = 0; i < 455; i++) {
+            b.put("hi" + i, 1);
+        }
+        int size = 0;
+        for (String key : b) {
+            assertTrue(b.keySet().contains(key));
+            size++ ;
+        }
+        assertEquals(b.keySet().size(), size);
+
+    }
 
     public static void main(String[] args) {
         jh61b.junit.TestRunner.runTests(TestMyHashMap.class);
