@@ -13,7 +13,9 @@ public class ComplexOomage implements Oomage {
     public int hashCode() {
         int total = 0;
         for (int x : params) {
-            total = total * 256;
+            // 256 == left shift 8 bits
+            // So Integer x whose coefficient >= 256^4 after hashing will be ignored
+            total = total * 256;        // change 256 to 257(prime) to avoid ignoring top bits problem
             total = total + x;
         }
         return total;

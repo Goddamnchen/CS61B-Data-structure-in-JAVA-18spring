@@ -3,7 +3,7 @@ import java.awt.Font;
 import edu.princeton.cs.algs4.StdDraw;
 
 public class HashTableDrawingUtility {
-    private static final double X_OFFSET = 0.1;
+    private static final double X_OFFSET = 0.10;
     private static final double Y_SLACK_SPACE = 0.08;
     private static final int MAX_FONT_SIZE = 24;
     private static final double FONT_SCALING_FACTOR = 400.0;
